@@ -2,8 +2,14 @@ from django.db import models
 from django.utils import timezone
 from django.contrib.auth.models import User
 
+class PublishedManager(models.Manager):
+    def get_queryset(self):
+        return super().get_queryset().filter(status=Post.Status.PUBLISHED)
+
 # Create your models here.
 class Post(models.Model):
+    objects = models.Manager()
+    published = PublishedManager()
 
     class Status(models.TextChoices):
         DRAFT = 'DF', 'Draft'
